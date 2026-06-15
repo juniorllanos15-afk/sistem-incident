@@ -1,0 +1,12 @@
+# Entorno
+.env
+
+# Dependencias
+vendor/
+
+# Logs
+*.log
+
+# Sistema
+Thumbs.db
+.DS_Store
