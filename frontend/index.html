@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident System Categories</title>
+    <!-- Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1 class="logo">Sys<span class="highlight">Incidencias</span></h1>
+        <ul class="nav">
+            <li><a href="#categories" class="nav-link active">Categorias</a></li>
+            <li><a href="#incidents" class="nav-link">Incidencias</a></li>
+            <li><a href="#assignments" class="nav-link">Asignaciones</a></li>
+            <li><a href="#solutions" class="nav-link">Soluciones</a></li>
+            <li><a href="#users" class="nav-link">Usuarios</a></li>
+            <li><a href="#roles" class="nav-link">Roles</a></li>
+            <!-- <li><a href="#settings" class="nav-link">Settings</a></li> -->
+        </ul>
+        <div style="position: absolute; bottom: 2rem; width: calc(250px - 4rem);">
+            <a href="#" id="nav-logout" class="btn"
+                style="width: 100%; text-align: center; border: 1px solid var(--border-color); color: var(--text-color);">Cerrar
+                Sesión</a>
+        </div>
+    </div>
+
+    <div class="main-content" id="app-content">
+        <!-- SPA views will be injected here -->
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Action Successful!</div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="modules/categories/categories.js"></script>
+    <script src="modules/roles/roles.js"></script>
+    <script src="modules/users/users.js"></script>
+    <script src="modules/incidents/incidents.js"></script>
+    <script src="modules/assignments/assignments.js"></script>
+    <script src="modules/solutions/solutions.js"></script>
+</body>
+
+
+</html>

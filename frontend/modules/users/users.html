@@ -1,0 +1,60 @@
+<header>
+    <h2>Lista de Usuarios</h2>
+    <button class="btn btn-primary shadow-hover" id="btn-add-user">+ New User</button>
+</header>
+
+<div class="card glass-effect">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role ID</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="user-list">
+            <!-- Data populated via JS -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for Create/Edit -->
+<div class="modal" id="user-modal">
+    <div class="modal-content glass-effect">
+        <div class="modal-header">
+            <h3 id="user-modal-title">Create User</h3>
+            <span class="close-btn" id="close-user-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="user-form">
+                <input type="hidden" id="user-id">
+                <div class="form-group">
+                    <label for="user-name">Username</label>
+                    <input type="text" id="user-name" required placeholder="E.g., jdoe99" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="user-email">Email Address</label>
+                    <input type="email" id="user-email" required placeholder="E.g., jdoe@example.com"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="user-password">Password</label>
+                    <input type="password" id="user-password" placeholder="Password (Leave blank to keep current)">
+                    <small id="password-hint" style="display:none; color:#666;">Leave blank to keep existing
+                        password</small>
+                </div>
+                <div class="form-group">
+                    <label for="user-role">Role</label>
+                    <select id="user-role" required>
+                        <option value="" disabled selected>Loading Roles...</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-user">Guardar Usuario</button>
+            </form>
+        </div>
+    </div>
+</div>

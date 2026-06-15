@@ -1,0 +1,85 @@
+<!-- assignments.html -->
+<div id="assignment-list-view">
+    <header>
+        <h2>Asignaciones de Técnicos</h2>
+        <button class="btn btn-primary" id="btn-add-assignment">+ Nueva Asignación</button>
+    </header>
+
+    <div class="card glass-effect">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Incidencia</th>
+                    <th>Prioridad</th>
+                    <th>Fecha Asignación</th>
+                    <th>Técnicos</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="assignment-list">
+                <!-- Se llena mediante JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Vista Formulario -->
+<div id="assignment-form-view" class="hidden">
+    <header>
+        <h2>Realizar Asignación</h2>
+        <button class="btn btn-primary" id="btn-back-assignments">← Volver</button>
+    </header>
+
+    <div class="card glass-effect">
+        <form id="assignment-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="asig-incident">Seleccionar Incidencia</label>
+                    <select id="asig-incident" required>
+                        <option value="">Cargando incidencias...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="asig-priority">Prioridad</label>
+                    <select id="asig-priority" required>
+                        <option value="Baja">Baja</option>
+                        <option value="Media" selected>Media</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Crítica">Crítica</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(255,255,255,0.05); margin-top: 1rem; border: 1px dashed rgba(255,255,255,0.2);">
+                <h3 style="font-size: 0.9rem; margin-bottom: 1rem;">Asignar Técnicos</h3>
+                <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label for="asig-tech-select">Técnico Disponible</label>
+                        <select id="asig-tech-select">
+                            <option value="">Cargando técnicos...</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-edit" id="btn-add-tech-to-list">Añadir Técnico</button>
+                </div>
+
+                <table class="data-table" style="font-size: 0.85rem;">
+                    <thead>
+                        <tr>
+                            <th>Nombre Técnico</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="selected-techs-list">
+                        <!-- Técnicos seleccionados -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Registrar Asignación</button>
+                <button type="button" class="btn btn-delete" id="btn-cancel-asig">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

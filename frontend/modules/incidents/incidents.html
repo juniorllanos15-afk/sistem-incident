@@ -1,0 +1,139 @@
+<div id="incident-list-view">
+    <header>
+        <h2>Lista Incidencias</h2>
+        <button class="btn btn-primary shadow-hover" id="btn-add-incident">+ Nueva Incidencia</button>
+    </header>
+
+    <div class="card glass-effect">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="incident-list">
+                <!-- Se llena mediante JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Vista 2: Formulario de Incidencia (Se muestra a pantalla completa) -->
+<div id="incident-form-view" class="hidden">
+    <header>
+        <h2 id="view-title">Nueva Incidencia</h2>
+        <button class="btn btn-primary" id="btn-back-list">← Volver a la lista</button>
+    </header>
+
+    <div class="card glass-effect">
+        <form id="incident-form">
+            <input type="hidden" id="inc-id">
+
+            <!-- Fila 1: Título y Fecha -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="inc-name">Título</label>
+                    <input type="text" id="inc-name" required placeholder="E.g., No funciona el servidor" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="inc-date">Fecha de Incidencia</label>
+                    <input type="datetime-local" id="inc-date" required>
+                </div>
+            </div>
+
+            <!-- Fila 2: Coordenadas -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="inc-lat">Latitud</label>
+                    <input type="text" id="inc-lat" readonly placeholder="0.000000" style="background: rgba(0,0,0,0.2);">
+                </div>
+                <div class="form-group">
+                    <label for="inc-lng">Longitud</label>
+                    <input type="text" id="inc-lng" readonly placeholder="0.000000" style="background: rgba(0,0,0,0.2);">
+                </div>
+            </div>
+
+            <!-- Fila 3: Mapa y Estado -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Localización Mapa</label>
+                    <button type="button" class="btn btn-edit" id="btn-open-map" style="width: 100%;">
+                        📍 Seleccionar Ubicación
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="inc-status-select">Estado</label>
+                    <select id="inc-status-select" disabled>
+                        <option value="1" selected>Pendiente</option>
+                        <option value="2">En proceso</option>
+                        <option value="3">Resuelto</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inc-category">Categoría de Incidencia</label>
+                <select id="inc-category" required>
+                    <option value="">Cargando categorías...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="inc-ubication">Referencia de Ubicación (Manual)</label>
+                <input type="text" id="inc-ubication" required placeholder="E.g., Oficina 302, Edificio B">
+            </div>
+
+            <div class="form-group">
+                <label for="inc-desc">Descripción General</label>
+                <textarea id="inc-desc" rows="5" placeholder="Escribe un resumen de la incidencia aquí..."></textarea>
+            </div>
+
+            <!-- SECCIÓN DE DETALLES ADICIONALES -->
+            <div class="card glass-effect" style="margin-top: 2rem; border: 1px solid rgba(59, 130, 246, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="color: #fff; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Detalles Específicos</h3>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label for="inc-detail-desc">Descripción del detalle</label>
+                        <input type="text" id="inc-detail-desc" placeholder="E.g., Primer diagnóstico: fallo de memoria RAM">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btn-add-detail">Añadir</button>
+                </div>
+
+                <div id="detail-list-wrapper" style="max-height: 200px; overflow-y: auto;">
+                    <table class="data-table" style="font-size: 0.85rem;">
+                        <tbody id="detail-items-list">
+                            <!-- Items dinámicos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" id="btn-save">Registrar Incidencia</button>
+                <button type="button" class="btn btn-delete" id="btn-cancel-form">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para el Mapa Leaflet -->
+<div class="map-modal" id="map-modal">
+    <div class="map-modal-content">
+        <div class="modal-header">
+            <h3>Seleccionar Ubicación Exacta</h3>
+            <span class="close-btn" id="close-map-modal">&times;</span>
+        </div>
+        <div id="map-container"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+            <button class="btn btn-primary" id="btn-confirm-location">Confirmar Ubicación</button>
+        </div>
+    </div>
+</div>

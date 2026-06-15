@@ -1,0 +1,4 @@
+[2026-06-15 13:05:05] EVENTO: 'incident.created' | Incidencia ID: 4 - probandoooooooooooo
+[2026-06-15 13:09:42] EVENTO: 'incident.state_changed' | Incidencia ID: 4 - 
+[2026-06-15 13:19:50] EVENTO: 'incident.state_changed' | Incidencia ID: 3 - 
+EMAIL: Notificación enviada. Estado de la incidencia 3 cambió a: 2

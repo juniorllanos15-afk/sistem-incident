@@ -1,0 +1,59 @@
+<!-- solutions.html -->
+<div id="solution-access-denied" class="hidden">
+    <div class="card glass-effect" style="text-align: center; padding: 5rem;">
+        <h2 style="color: #ef4444;">Acceso Denegado</h2>
+        <p>Esta sección es exclusiva para usuarios con rol de <strong>Técnico</strong>.</p>
+    </div>
+</div>
+
+<div id="solution-main-view" class="hidden">
+    <header>
+        <h2>Solución de Incidencias Asignadas</h2>
+    </header>
+
+    <div class="card glass-effect">
+        <h3>Mis Tareas Asignadas</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: rgba(255,255,255,0.6);">A continuación se muestran las incidencias en las que has sido asignado como técnico.</p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID Asig.</th>
+                    <th>ID Incidencia</th>
+                    <th>Fecha Asignación</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="assigned-incidents-list">
+                <tr><td colspan="4">Cargando tareas...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="solution-form-view" class="hidden">
+    <header>
+        <h2>Registrar Solución</h2>
+        <button class="btn btn-primary" id="btn-back-solutions">← Volver</button>
+    </header>
+
+    <div id="incident-header-info" class="card glass-effect" style="margin-bottom: 1.5rem; border-left: 4px solid var(--primary-color);">
+        <!-- Info de la incidencia cargada por JS -->
+    </div>
+
+    <div class="card glass-effect">
+        <form id="solution-form">
+            <input type="hidden" id="sol-incident-id">
+            <input type="hidden" id="sol-asig-detail-id">
+            
+            <div id="incident-details-solutions-container">
+                <!-- Se generarán textareas dinámicos para cada detalle aquí -->
+                <p>Cargando detalles de la incidencia...</p>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Guardar Soluciones</button>
+                <button type="button" class="btn btn-delete" id="btn-cancel-solutions">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

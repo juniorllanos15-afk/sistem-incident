@@ -1,0 +1,6 @@
+{
+    "name": "app/incident-service",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

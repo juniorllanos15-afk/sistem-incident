@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysIncidencias - Login</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+        }
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .login-box .logo {
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card glass-effect login-box">
+        <h1 class="logo">Sys<span class="highlight">Incidencias</span></h1>
+        
+        <form id="login-form">
+            <div class="form-group" style="text-align: left;">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" required placeholder="admin@ejemplo.com" autocomplete="off">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" required placeholder="******">
+            </div>
+            
+            <div id="login-error" style="color: #ff4757; font-size: 0.9rem; margin-bottom: 1rem; display: none;"></div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Iniciar Sesión</button>
+        </form>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
