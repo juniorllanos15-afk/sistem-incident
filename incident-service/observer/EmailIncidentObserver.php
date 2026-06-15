@@ -16,6 +16,8 @@ class EmailIncidentObserver implements IncidentObserverInterface
         }
 
         $userEmail = $this->getUserEmail($userId);
+
+        file_put_contents(__DIR__ . '/../incidents.log', 'useremail: ' . $userEmail, FILE_APPEND);
         if (!$userEmail) {
             error_log("EMAIL: No se pudo obtener email para user_id=$userId");
             return;
@@ -24,12 +26,12 @@ class EmailIncidentObserver implements IncidentObserverInterface
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = SMTP_HOST;
-            $mail->SMTPAuth   = true;
-            $mail->Username   = SMTP_USER;
-            $mail->Password   = SMTP_PASS;
+            $mail->Host = SMTP_HOST;
+            $mail->SMTPAuth = true;
+            $mail->Username = SMTP_USER;
+            $mail->Password = SMTP_PASS;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = SMTP_PORT;
+            $mail->Port = SMTP_PORT;
 
             $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
             $mail->addAddress($userEmail);
@@ -37,20 +39,29 @@ class EmailIncidentObserver implements IncidentObserverInterface
 
             if ($event === 'incident.created') {
                 $mail->Subject = "Nueva incidencia creada: " . ($data['title'] ?? '');
-                $mail->Body    = "Se ha registrado una nueva incidencia.\n\n"
-                               . "Título: " . ($data['title'] ?? '') . "\n"
-                               . "Descripción: " . ($data['description'] ?? '') . "\n"
-                               . "Ubicación: " . ($data['ubication'] ?? '') . "\n"
-                               . "ID de incidencia: " . ($data['id'] ?? 'N/A');
+                $mail->Body = "Se ha registrado una nueva incidencia.\n\n"
+                    . "Título: " . ($data['title'] ?? '') . "\n"
+                    . "Descripción: " . ($data['description'] ?? '') . "\n"
+                    . "Ubicación: " . ($data['ubication'] ?? '') . "\n"
+                    . "ID de incidencia: " . ($data['id'] ?? 'N/A');
+            } elseif ($event === 'incident.updated') {
+                $mail->Subject = "Incidencia #" . ($data['id'] ?? 'N/A') . " actualizada";
+                $mail->Body = "Se ha actualizado una incidencia.\n\n"
+                    . "Título: " . ($data['title'] ?? '') . "\n"
+                    . "Descripción: " . ($data['description'] ?? '') . "\n"
+                    . "Ubicación: " . ($data['ubication'] ?? '') . "\n"
+                    . "ID de incidencia: " . ($data['id'] ?? 'N/A');
             } elseif ($event === 'incident.state_changed') {
                 $stateNames = [1 => 'Pendiente', 2 => 'En Proceso', 3 => 'Finalizado'];
                 $stateLabel = $stateNames[$data['state'] ?? 1] ?? 'Desconocido';
                 $mail->Subject = "Estado de incidencia #" . ($data['id'] ?? 'N/A') . " actualizado";
-                $mail->Body    = "La incidencia #" . ($data['id'] ?? 'N/A')
-                               . " ha cambiado su estado a: " . $stateLabel;
+                $mail->Body = "La incidencia #" . ($data['id'] ?? 'N/A')
+                    . " ha cambiado su estado a: " . $stateLabel;
             }
 
             $mail->send();
+
+            file_put_contents(__DIR__ . '/../incidents.log', "EMAIL: Correo enviado exitosamente a $userEmail para el evento '$event'", FILE_APPEND);
             error_log("EMAIL: Correo enviado exitosamente a $userEmail para el evento '$event'");
 
         } catch (Exception $e) {

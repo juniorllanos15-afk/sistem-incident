@@ -1,4 +1,9 @@
 [2026-06-15 13:05:05] EVENTO: 'incident.created' | Incidencia ID: 4 - probandoooooooooooo
 [2026-06-15 13:09:42] EVENTO: 'incident.state_changed' | Incidencia ID: 4 - 
 [2026-06-15 13:19:50] EVENTO: 'incident.state_changed' | Incidencia ID: 3 - 
-EMAIL: Notificación enviada. Estado de la incidencia 3 cambió a: 2
+EMAIL: Notificación enviada. Estado de la incidencia 3 cambió a: 2[2026-06-15 13:52:36] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
+[2026-06-15 13:52:47] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
+[2026-06-15 13:58:58] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
+useremail: admin@admin.com[2026-06-15 13:59:43] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
+useremail: juniorllanos15@gmail.com[2026-06-15 14:00:47] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
+useremail: juniorllanos15@gmail.comEMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.updated'

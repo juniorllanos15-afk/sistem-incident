@@ -135,6 +135,20 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
             }
 
             $this->pdo->commit();
+
+            $stmt = $this->pdo->prepare("SELECT user_id FROM incident WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $incident = $stmt->fetch();
+
+            $this->notify('incident.updated', [
+                'id' => $id,
+                'title' => $mainData['title'] ?? '',
+                'description' => $mainData['description'] ?? '',
+                'ubication' => $mainData['ubication'] ?? '',
+                'state' => $mainData['state'] ?? null,
+                'user_id' => $incident ? $incident['user_id'] : null
+            ]);
+
             return true;
 
         } catch (Exception $e) {
