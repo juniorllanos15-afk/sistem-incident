@@ -25,8 +25,11 @@ class AssignmentController {
         $id = $this->model->create($data);
 
         if ($id) {
-            // Actualizar estado de la incidencia a "En Proceso" (2)
-            $this->syncIncidentState($data['incident_id'], 2);
+            $technicianIds = isset($data['technicians']) && is_array($data['technicians'])
+                ? array_map('intval', $data['technicians'])
+                : [];
+
+            $this->syncIncidentState($data['incident_id'], 2, $technicianIds);
 
             echo json_encode(['success' => true, 'id' => $id, 'message' => 'Assignment created successfully']);
         } else {
@@ -38,9 +41,13 @@ class AssignmentController {
     /**
      * Sincroniza el estado de la incidencia en el microservicio correspondiente
      */
-    private function syncIncidentState($incidentId, $state) {
+    private function syncIncidentState($incidentId, $state, array $technicianIds = []) {
         $url = "http://localhost:8004/index.php?action=changeState";
-        $payload = json_encode(['id' => $incidentId, 'state' => $state]);
+        $payload = json_encode([
+            'id' => $incidentId,
+            'state' => $state,
+            'technician_ids' => $technicianIds
+        ]);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -72,6 +79,17 @@ class AssignmentController {
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Technician ID required']);
+        }
+    }
+
+    public function listByIncident() {
+        $id = isset($_GET['incident_id']) ? intval($_GET['incident_id']) : null;
+        if ($id) {
+            $data = $this->model->getByIncident($id);
+            echo json_encode(['success' => true, 'data' => $data]);
+        } else {
+            http_response_code(400);
+            echo json_encode(['error' => 'Incident ID required']);
         }
     }
 }

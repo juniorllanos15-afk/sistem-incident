@@ -15,7 +15,7 @@ require_once 'observer/EmailIncidentObserver.php';
 $incidentRepo = new PDOIncidentRepository($pdo);
 // $incidentRepo = new MemoryIncidentRepository(); // Descomenta esta línea si usas MemoryIncidentRepository
 
-// Adjuntar observadores al repositorio
+// Adjuntar observadores
 $incidentRepo->attach(new LogIncidentObserver());
 $incidentRepo->attach(new EmailIncidentObserver());
 

@@ -6,4 +6,22 @@ EMAIL: Notificación enviada. Estado de la incidencia 3 cambió a: 2[2026-06-15 
 [2026-06-15 13:58:58] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
 useremail: admin@admin.com[2026-06-15 13:59:43] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
 useremail: juniorllanos15@gmail.com[2026-06-15 14:00:47] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo
-useremail: juniorllanos15@gmail.comEMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.updated'
+useremail: juniorllanos15@gmail.comEMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.updated'[2026-06-16 05:50:44] EVENTO: 'incident.created' | Incidencia ID: 5 - patio desordenado
+EMAIL: Correo enviado exitosamente a llduranj@gmail.com para el evento 'incident.created'
+EMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.created'
+[2026-06-16 05:52:58] EVENTO: 'incident.updated' | Incidencia ID: 5 - patio desordenado
+EMAIL: Correo enviado exitosamente a llduranj@gmail.com para el evento 'incident.updated'
+EMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.updated'
+[2026-06-16 05:54:59] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+EMAIL: Correo enviado exitosamente a juniorllanos15@gmail.com para el evento 'incident.state_changed'
+[2026-06-16 06:18:03] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 06:26:09] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 06:28:17] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 06:36:04] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 06:44:04] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+ingresa a update , state => 2ingresa a getTechnicianEmailsByIncident => 5[2026-06-16 06:46:09] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+ingresa a update , state => 2ingresa a getTechnicianEmailsByIncident => 5url => http://localhost:8005/index.php?action=by-incident&incident_id=5response => [2026-06-16 07:01:23] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 07:18:22] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 07:20:06] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 07:21:16] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-16 07:21:20] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 

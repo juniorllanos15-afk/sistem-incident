@@ -72,5 +72,11 @@ class Assignment {
         $stmt->execute(['id' => $techId]);
         return $stmt->fetchAll();
     }
+
+    public function getByIncident($incidentId) {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT technician_id FROM assignments_detail WHERE incident_id = :id");
+        $stmt->execute(['id' => $incidentId]);
+        return $stmt->fetchAll();
+    }
 }
 ?>

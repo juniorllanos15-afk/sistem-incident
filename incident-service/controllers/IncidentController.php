@@ -100,8 +100,11 @@ class IncidentController
         if (isset($data['id']) && isset($data['state'])) {
             $id = intval($data['id']);
             $state = intval($data['state']);
+            $technicianIds = isset($data['technician_ids']) && is_array($data['technician_ids'])
+                ? array_map('intval', $data['technician_ids'])
+                : [];
 
-            $success = $this->incidentRepo->updateState($id, $state);
+            $success = $this->incidentRepo->updateState($id, $state, $technicianIds);
 
             if ($success) {
                 echo json_encode(['success' => true, 'message' => 'Status updated successfully']);

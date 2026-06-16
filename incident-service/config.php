@@ -46,4 +46,6 @@ define('SMTP_PASS', getenv('SMTP_PASS') ?: '');
 define('SMTP_FROM', getenv('SMTP_FROM') ?: '');
 define('SMTP_FROM_NAME', getenv('SMTP_FROM_NAME') ?: 'Sistema de Incidencias');
 define('USER_SERVICE_URL', getenv('USER_SERVICE_URL') ?: 'http://localhost:8003/index.php');
+define('ROL_SERVICE_URL', getenv('ROL_SERVICE_URL') ?: 'http://localhost:8002/index.php');
+define('ASSIGNMENT_SERVICE_URL', getenv('ASSIGNMENT_SERVICE_URL') ?: 'http://localhost:8005/index.php');
 ?>

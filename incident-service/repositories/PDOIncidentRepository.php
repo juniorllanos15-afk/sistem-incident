@@ -1,35 +1,39 @@
 <?php
-// repositories/PDOIncidentRepository.php
+
 require_once 'IncidentRepositoryInterface.php';
+require_once __DIR__ . '/../observer/EventManager.php';
 
 class PDOIncidentRepository implements IncidentRepositoryInterface
 {
     private $pdo;
-    private $observers = [];
+    private EventManager $eventManager;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
+        $this->eventManager = new EventManager();
     }
 
-    // --- Implementación de los métodos de Observer ---
-    public function attach(IncidentObserverInterface $observer)
+    public function getEventManager(): EventManager
     {
-        $this->observers[] = $observer;
+        return $this->eventManager;
     }
 
-    public function detach(IncidentObserverInterface $observer)
+    public function attach(IncidentObserverInterface $observer): void
     {
-        $this->observers = array_filter($this->observers, function ($obs) use ($observer) {
-            return $obs !== $observer;
-        });
+        $this->eventManager->attach('*', $observer);
     }
 
-    public function notify(string $event, array $data)
+    public function detach(IncidentObserverInterface $observer): void
     {
-        foreach ($this->observers as $observer) {
-            $observer->update($event, $data);
+        foreach (array_keys($this->eventManager->getListeners()) as $event) {
+            $this->eventManager->detach($event, $observer);
         }
+    }
+
+    public function notify(string $event, array $data): void
+    {
+        $this->eventManager->dispatch($event, $data);
     }
 
     public function getAllActive()
@@ -43,7 +47,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
         try {
             $this->pdo->beginTransaction();
 
-            // Separar detalles de la data principal
             $details = isset($data['details']) ? $data['details'] : [];
             $mainData = $data;
             unset($mainData['details']);
@@ -58,7 +61,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
 
             $incidentId = $this->pdo->lastInsertId();
 
-            // Insertar detalles si existen
             if (!empty($details)) {
                 $detailSql = "INSERT INTO incident_detail (incident_id, description, user_id) 
                               VALUES (:incident_id, :description, :user_id)";
@@ -75,7 +77,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
 
             $this->pdo->commit();
 
-            // Notificar a los observadores
             $data['id'] = $incidentId;
             $this->notify('incident.created', $data);
 
@@ -100,7 +101,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
         try {
             $this->pdo->beginTransaction();
 
-            // Separar detalles de la data principal
             $details = isset($data['details']) ? $data['details'] : [];
             $mainData = $data;
             unset($mainData['details']);
@@ -115,11 +115,9 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
                 throw new Exception("Error al actualizar la incidencia principal");
             }
 
-            // Sincronizar detalles: Borrar antiguos para esta incidencia
             $deleteSql = "DELETE FROM incident_detail WHERE incident_id = :id";
             $this->pdo->prepare($deleteSql)->execute(['id' => $id]);
 
-            // Insertar la nueva lista de detalles
             if (!empty($details)) {
                 $detailSql = "INSERT INTO incident_detail (incident_id, description, user_id) 
                               VALUES (:incident_id, :description, :user_id)";
@@ -136,18 +134,8 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
 
             $this->pdo->commit();
 
-            $stmt = $this->pdo->prepare("SELECT user_id FROM incident WHERE id = :id");
-            $stmt->execute(['id' => $id]);
-            $incident = $stmt->fetch();
-
-            $this->notify('incident.updated', [
-                'id' => $id,
-                'title' => $mainData['title'] ?? '',
-                'description' => $mainData['description'] ?? '',
-                'ubication' => $mainData['ubication'] ?? '',
-                'state' => $mainData['state'] ?? null,
-                'user_id' => $incident ? $incident['user_id'] : null
-            ]);
+            $data['id'] = $id;
+            $this->notify('incident.updated', $data);
 
             return true;
 
@@ -158,7 +146,7 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
         }
     }
 
-    public function updateState($id, $state)
+    public function updateState($id, $state, array $technicianIds = [])
     {
         $stmt = $this->pdo->prepare("SELECT user_id FROM incident WHERE id = :id");
         $stmt->execute(['id' => $id]);
@@ -166,21 +154,22 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
 
         $stmt = $this->pdo->prepare("UPDATE incident SET state = :state WHERE id = :id");
         $success = $stmt->execute(['state' => $state, 'id' => $id]);
+
         if ($success) {
             $this->notify('incident.state_changed', [
                 'id' => $id,
                 'state' => $state,
-                'user_id' => $incident ? $incident['user_id'] : null
+                'user_id' => $incident ? $incident['user_id'] : null,
+                'technician_ids' => $technicianIds
             ]);
         }
+
         return $success;
     }
 
     public function disable($id)
     {
-        // Soft delete by setting status to 0
         $stmt = $this->pdo->prepare("UPDATE incident SET status = 0 WHERE id = :id");
         return $stmt->execute(['id' => $id]);
     }
 }
-?>
