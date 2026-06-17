@@ -3,23 +3,27 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/vendor/autoload.php';
 require_once 'config.php';
 require_once 'models/Incident.php';
-require_once 'repositories/IncidentRepositoryInterface.php';
 require_once 'repositories/PDOIncidentRepository.php';
 // require_once 'repositories/MemoryIncidentRepository.php'; // Descomenta esta línea si usas MemoryIncidentRepository
+require_once 'services/IncidentService.php';
 require_once 'controllers/IncidentController.php';
 
 // Importar Observadores
 require_once 'observer/LogIncidentObserver.php';
 require_once 'observer/EmailIncidentObserver.php';
+require_once 'observer/EventManager.php';
 
 $incidentRepo = new PDOIncidentRepository($pdo);
 // $incidentRepo = new MemoryIncidentRepository(); // Descomenta esta línea si usas MemoryIncidentRepository
 
-// Adjuntar observadores
-$incidentRepo->attach(new LogIncidentObserver());
-$incidentRepo->attach(new EmailIncidentObserver());
+$eventManager = new EventManager();
 
-$controller = new IncidentController($incidentRepo);
+// Adjuntar observadores al EventManager
+$eventManager->attach('*', new LogIncidentObserver());
+$eventManager->attach('*', new EmailIncidentObserver());
+
+$incidentService = new IncidentService($incidentRepo, $eventManager);
+$controller = new IncidentController($incidentService);
 
 // Get the requested action/endpoint from the query string
 $action = isset($_GET['action']) ? $_GET['action'] : null;

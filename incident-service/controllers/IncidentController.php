@@ -1,18 +1,17 @@
 <?php
-// controllers/IncidentController.php
 
 class IncidentController
 {
-    private $incidentRepo;
+    private IncidentService $incidentService;
 
-    public function __construct(IncidentRepositoryInterface $incidentRepo)
+    public function __construct(IncidentService $incidentService)
     {
-        $this->incidentRepo = $incidentRepo;
+        $this->incidentService = $incidentService;
     }
 
     public function index()
     {
-        $incidents = $this->incidentRepo->getAllActive();
+        $incidents = $this->incidentService->getAllActive();
         echo json_encode(['success' => true, 'data' => $incidents]);
     }
 
@@ -34,7 +33,7 @@ class IncidentController
                 'details' => isset($data['details']) ? $data['details'] : []
             ];
 
-            $insertedId = $this->incidentRepo->create($preparedData);
+            $insertedId = $this->incidentService->create($preparedData);
 
             if ($insertedId) {
                 echo json_encode(['success' => true, 'id' => $insertedId, 'message' => 'Incident created successfully']);
@@ -67,7 +66,7 @@ class IncidentController
                 'details' => isset($data['details']) ? $data['details'] : []
             ];
 
-            $success = $this->incidentRepo->update($id, $preparedData);
+            $success = $this->incidentService->update($id, $preparedData);
 
             if ($success) {
                 echo json_encode(['success' => true, 'message' => 'Incident updated successfully']);
@@ -85,7 +84,7 @@ class IncidentController
     {
         $id = isset($_GET['incident_id']) ? intval($_GET['incident_id']) : null;
         if ($id) {
-            $details = $this->incidentRepo->getDetailsByIncident($id);
+            $details = $this->incidentService->getDetailsByIncident($id);
             echo json_encode(['success' => true, 'data' => $details]);
         } else {
             http_response_code(400);
@@ -104,7 +103,7 @@ class IncidentController
                 ? array_map('intval', $data['technician_ids'])
                 : [];
 
-            $success = $this->incidentRepo->updateState($id, $state, $technicianIds);
+            $success = $this->incidentService->changeState($id, $state, $technicianIds);
 
             if ($success) {
                 echo json_encode(['success' => true, 'message' => 'Status updated successfully']);
@@ -125,7 +124,7 @@ class IncidentController
         if (isset($data['id'])) {
             $id = intval($data['id']);
 
-            $success = $this->incidentRepo->disable($id);
+            $success = $this->incidentService->disable($id);
 
             if ($success) {
                 echo json_encode(['success' => true, 'message' => 'Incident disabled successfully']);
@@ -139,4 +138,3 @@ class IncidentController
         }
     }
 }
-?>

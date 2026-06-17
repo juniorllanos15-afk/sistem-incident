@@ -1,18 +1,14 @@
 <?php
 
 require_once 'IncidentRepositoryInterface.php';
-require_once __DIR__ . '/../observer/EventManager.php';
 
 class MemoryIncidentRepository implements IncidentRepositoryInterface
 {
     private $incidents = [];
-    private EventManager $eventManager;
     private $nextDetailId = 10;
 
     public function __construct()
     {
-        $this->eventManager = new EventManager();
-
         $this->incidents = [
             1 => [
                 'id' => 1,
@@ -54,28 +50,6 @@ class MemoryIncidentRepository implements IncidentRepositoryInterface
         ];
     }
 
-    public function getEventManager(): EventManager
-    {
-        return $this->eventManager;
-    }
-
-    public function attach(IncidentObserverInterface $observer): void
-    {
-        $this->eventManager->attach('*', $observer);
-    }
-
-    public function detach(IncidentObserverInterface $observer): void
-    {
-        foreach (array_keys($this->eventManager->getListeners()) as $event) {
-            $this->eventManager->detach($event, $observer);
-        }
-    }
-
-    public function notify(string $event, array $data): void
-    {
-        $this->eventManager->dispatch($event, $data);
-    }
-
     public function getAllActive()
     {
         $active = [];
@@ -88,6 +62,11 @@ class MemoryIncidentRepository implements IncidentRepositoryInterface
             return $b['id'] - $a['id'];
         });
         return $active;
+    }
+
+    public function findById($id)
+    {
+        return $this->incidents[$id] ?? null;
     }
 
     public function create(array $data)
@@ -127,10 +106,6 @@ class MemoryIncidentRepository implements IncidentRepositoryInterface
         }
 
         $this->incidents[$id] = $incidentData;
-
-        $data['id'] = $id;
-        $this->notify('incident.created', $data);
-
         return $id;
     }
 
@@ -166,9 +141,6 @@ class MemoryIncidentRepository implements IncidentRepositoryInterface
             }
         }
 
-        $data['id'] = $id;
-        $this->notify('incident.updated', $data);
-
         return true;
     }
 
@@ -179,14 +151,6 @@ class MemoryIncidentRepository implements IncidentRepositoryInterface
         }
 
         $this->incidents[$id]['state'] = $state;
-
-        $this->notify('incident.state_changed', [
-            'id' => $id,
-            'state' => $state,
-            'user_id' => $this->incidents[$id]['user_id'] ?? null,
-            'technician_ids' => $technicianIds
-        ]);
-
         return true;
     }
 

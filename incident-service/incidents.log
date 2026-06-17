@@ -25,3 +25,4 @@ ingresa a update , state => 2ingresa a getTechnicianEmailsByIncident => 5url => 
 [2026-06-16 07:20:06] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
 [2026-06-16 07:21:16] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
 [2026-06-16 07:21:20] EVENTO: 'incident.state_changed' | Incidencia ID: 5 - 
+[2026-06-17 04:56:45] EVENTO: 'incident.updated' | Incidencia ID: 4 - probandoooooooooooo

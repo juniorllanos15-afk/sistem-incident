@@ -1,45 +1,27 @@
 <?php
 
 require_once 'IncidentRepositoryInterface.php';
-require_once __DIR__ . '/../observer/EventManager.php';
 
 class PDOIncidentRepository implements IncidentRepositoryInterface
 {
     private $pdo;
-    private EventManager $eventManager;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
-        $this->eventManager = new EventManager();
-    }
-
-    public function getEventManager(): EventManager
-    {
-        return $this->eventManager;
-    }
-
-    public function attach(IncidentObserverInterface $observer): void
-    {
-        $this->eventManager->attach('*', $observer);
-    }
-
-    public function detach(IncidentObserverInterface $observer): void
-    {
-        foreach (array_keys($this->eventManager->getListeners()) as $event) {
-            $this->eventManager->detach($event, $observer);
-        }
-    }
-
-    public function notify(string $event, array $data): void
-    {
-        $this->eventManager->dispatch($event, $data);
     }
 
     public function getAllActive()
     {
         $stmt = $this->pdo->query("SELECT id, title, description, status, state, date_incident, latitude, longitude, ubication, category_id, user_id, created_at FROM incident WHERE status = 1 ORDER BY id DESC");
         return $stmt->fetchAll();
+    }
+
+    public function findById($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT id, title, description, status, state, date_incident, latitude, longitude, ubication, category_id, user_id, created_at FROM incident WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
     }
 
     public function create(array $data)
@@ -76,10 +58,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
             }
 
             $this->pdo->commit();
-
-            $data['id'] = $incidentId;
-            $this->notify('incident.created', $data);
-
             return $incidentId;
 
         } catch (Exception $e) {
@@ -133,10 +111,6 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
             }
 
             $this->pdo->commit();
-
-            $data['id'] = $id;
-            $this->notify('incident.updated', $data);
-
             return true;
 
         } catch (Exception $e) {
@@ -148,23 +122,8 @@ class PDOIncidentRepository implements IncidentRepositoryInterface
 
     public function updateState($id, $state, array $technicianIds = [])
     {
-        $stmt = $this->pdo->prepare("SELECT user_id FROM incident WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $incident = $stmt->fetch();
-
         $stmt = $this->pdo->prepare("UPDATE incident SET state = :state WHERE id = :id");
-        $success = $stmt->execute(['state' => $state, 'id' => $id]);
-
-        if ($success) {
-            $this->notify('incident.state_changed', [
-                'id' => $id,
-                'state' => $state,
-                'user_id' => $incident ? $incident['user_id'] : null,
-                'technician_ids' => $technicianIds
-            ]);
-        }
-
-        return $success;
+        return $stmt->execute(['state' => $state, 'id' => $id]);
     }
 
     public function disable($id)
